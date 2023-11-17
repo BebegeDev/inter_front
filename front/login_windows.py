@@ -20,7 +20,6 @@ class UiMainWindow(QWidget):
         super().__init__()
         self.main_window = None
         self.auto_window = None
-        self.mqttc = None
         self.statusbar = None
         self.menubar = None
         self.label_2 = None
@@ -35,7 +34,6 @@ class UiMainWindow(QWidget):
         self.verticalScrollBar = None
         self.button_autorization = None
         self.ui_back_auto = UiAutoWindowBack()
-        self.ui_back_main = MainWindowBack()
         self.threadpool = QThreadPool()
 
     def setup_ui(self, maine_window):
@@ -132,9 +130,7 @@ class UiMainWindow(QWidget):
         self.progressBar.setRange(0, 100)
         self.progressBar.hide()
         if self.ui_back_auto.connected_user:
-            self.main_window = MainWindowBack()
-
-            # self.main_window = SshTerminalWindow()
+            self.main_window = MainWindowBack(self.ui_back_auto.mqttc)
             self.main_window.show()
             self.auto_window.close()
 

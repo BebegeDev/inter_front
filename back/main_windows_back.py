@@ -5,20 +5,26 @@ from PyQt6.QtWidgets import QMainWindow
 import paramiko
 from front.main_windows import Ui_MainWindow
 from back.work import Worker
+from back.callback_mqtt import CallbackMQTT
+from PyQt6.QtGui import QColor
 
 
 class MainWindowBack(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, mqttc):
         super().__init__()
         self.last = None
         self.setupUi(self)
         self.command = None
         self.setupUi(self)
+        # self.change_color()
         self.send_command_console.clicked.connect(self.execute_command)
         self.output_console.setReadOnly(True)
         self.threadpool = QThreadPool()
         self.ssh_client = paramiko.SSHClient()
         self.connect_to_server('10.2.173.136', 22, 'user1', '123')
+        self.change_color()
+        self.mqttc = CallbackMQTT(mqttc)
+        self.run_method_mqtt_callback()
 
 
     def execute_command(self):
@@ -75,5 +81,23 @@ class MainWindowBack(QMainWindow, Ui_MainWindow):
             return '\n'.join(output.split('\n')[:-1])
         else:
             return self.last + '\n'.join(output.split('\n')[:-1])
+
+    def run_method_mqtt_callback(self):
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.233', 8462)/Current", self.d_c_1)
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.233', 8462)/Volt", self.d_u_1)
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.233', 8462)/Power", self.d_p_1)
+
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.234', 8462)/Current",  self.d_c_2)
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.234', 8462)/Volt", self.d_u_2)
+        self.mqttc.callback_data("mpei/Emulator_('10.2.173.234', 8462)/Power", self.d_p_2)
+
+    def change_color(self):
+        self.d_c_1.setStyleSheet("QLCDNumber { color: green; }")
+        self.d_u_1.setStyleSheet("QLCDNumber { color: green; }")
+        self.d_p_1.setStyleSheet("QLCDNumber { color: green; }")
+        self.d_c_2.setStyleSheet("QLCDNumber { color: green; }")
+        self.d_u_2.setStyleSheet("QLCDNumber { color: green; }")
+        self.d_p_2.setStyleSheet("QLCDNumber { color: green; }")
+
 
 

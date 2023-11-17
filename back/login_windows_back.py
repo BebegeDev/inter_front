@@ -2,7 +2,6 @@ import time
 from datetime import datetime
 from utils.create_file_and_path import Util
 import paho.mqtt.client as mqtt
-import asyncio
 
 
 class UiAutoWindowBack:
@@ -10,12 +9,10 @@ class UiAutoWindowBack:
     def __init__(self):
 
         self.connected_user = None
-        self.mqttc = None
         self.list_connections_y = ["Авторизация успешна", "Успешное подключения к серверу MQTT"]
         self.list_connections_n = ["Авторизация неуспешна", "Ошибка подключения к серверу MQTT"]
         self.message = None
         self.auto_user = False
-        self.mqttc = mqtt.Client()
 
     @staticmethod
     def get_date():
@@ -47,7 +44,6 @@ class UiAutoWindowBack:
         host = config["MQTT"]["MQTT_HOST"]
         port = int(config["MQTT"]["MQTT_PORT"])
         interval = int(config["MQTT"]["MQTT_KEEPALIVE_INTERVAL"])
-
         self.mqttc = mqtt.Client()
         self.mqttc.username_pw_set(username=user, password=password)
         self.mqttc.on_connect = self.on_connect
