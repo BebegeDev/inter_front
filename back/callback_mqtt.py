@@ -1,6 +1,5 @@
 import json
 from Interface.interface import InterfaceCallback
-
 interface = InterfaceCallback
 
 
@@ -10,6 +9,7 @@ class CallbackMQTT(InterfaceCallback):
         self.terminal = None
         self.data = None
         self.mqttc = mqttc
+
 
     def callback_data(self, topic, display):
         self.mqttc.message_callback_add(topic, lambda client, userdata, data: self.get_data(data, display))
@@ -21,3 +21,9 @@ class CallbackMQTT(InterfaceCallback):
 
     def validate_data(self, data):
         pass
+
+    def publish_data(self, topic, data):
+        self.mqttc.publish(topic, data)
+
+
+

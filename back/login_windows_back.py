@@ -19,7 +19,6 @@ class UiAutoWindowBack:
         current_datetime = datetime.now()
         return current_datetime.strftime("%H:%M:%S")
 
-
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
             self.connected_user = True

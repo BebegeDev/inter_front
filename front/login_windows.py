@@ -131,6 +131,7 @@ class UiMainWindow(QWidget):
         self.progressBar.hide()
         if self.ui_back_auto.connected_user:
             self.main_window = MainWindowBack(self.ui_back_auto.mqttc)
+            print(123)
             self.main_window.show()
             self.auto_window.close()
 
